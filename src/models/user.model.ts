@@ -5,6 +5,13 @@ export class RegisterUserRequest {
   email: string;
 }
 
+export class LoginUserRequest {
+  username: string;
+  password: string;
+  email: string;
+  token?: string;
+}
+
 export class UserResponse {
   username: string;
   name: string;
