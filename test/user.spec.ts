@@ -67,4 +67,24 @@ describe('UserController', () => {
       expect(response.body.data.name).toBe('test user');
     });
   });
+
+  describe('POST /api/users', () => {
+    it('should be rejected if rejected if username already exists', async () => {
+      await testService.createUser();
+
+      const response = await request(app.getHttpServer())
+        .post('/api/users')
+        .send({
+          username: 'test_user',
+          password: 'password_user',
+          name: 'test user',
+          email: 'test_email@example.com',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+  });
 });
