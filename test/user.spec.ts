@@ -30,6 +30,8 @@ describe('UserController', () => {
     await testService.deleteUser();
   });
 
+  // REGISTER TEST
+
   describe('POST /api/users', () => {
     it('should be rejected if request is invalid', async () => {
       const response = await request(app.getHttpServer())
@@ -85,6 +87,48 @@ describe('UserController', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
+    });
+  });
+
+  beforeEach(async () => {
+    await testService.deleteUser();
+    await testService.createUser();
+  });
+
+  // LOGIN TEST
+
+  describe('POST /api/users/login', () => {
+    it('should be rejected if request is invalid', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users/login')
+        .send({
+          username: '',
+          password: '',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(400);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(response.body.errors).toBeDefined();
+    });
+  });
+
+  describe('POST /api/users/login', () => {
+    it('should be able to login', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/api/users')
+        .send({
+          username: 'test_user',
+          password: 'password_user',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.username).toBe('test_user');
+      expect(response.body.data.name).toBe('test user');
+      expect(response.body.data.token).toBeDefined();
     });
   });
 });
