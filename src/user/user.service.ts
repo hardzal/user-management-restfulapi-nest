@@ -11,6 +11,7 @@ import { Logger } from 'winston';
 import { UserValidation } from './user.validation';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -91,7 +92,17 @@ export class UserService {
       name: user.name,
       email: user.email,
       created_at: user.created_at,
-      token: user.token || undefined,
+      token: user.token || '',
+    };
+  }
+
+  get(user: User): UserResponse {
+    return {
+      username: user.username,
+      name: user.name,
+      email: user.email,
+      token: user.token || '',
+      created_at: user.created_at,
     };
   }
 }

@@ -20,6 +20,7 @@ export class TestService {
         name: 'test user',
         password: await bcyrpt.hash('test_user', 10),
         email: 'test_email@example.com',
+        token: 'test',
       },
     });
   }

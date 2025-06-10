@@ -19,3 +19,9 @@ export class UserResponse {
   token?: string;
   created_at: Date;
 }
+
+export class UpdateUserRequest {
+  name?: string;
+  password?: string;
+  email?: string;
+}
