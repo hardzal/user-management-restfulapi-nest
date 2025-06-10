@@ -4,7 +4,7 @@ export class UserValidation {
   static readonly REGISTER: ZodType = z.object({
     username: z.string().min(3).max(100),
     password: z.string().min(6).max(100),
-    email: z.string().email(),
+    email: z.string().min(1).max(100).email(),
     name: z.string().min(1).max(100),
   });
 
@@ -16,6 +16,6 @@ export class UserValidation {
   static readonly UPDATE: ZodType = z.object({
     name: z.string().min(1).max(100).optional(),
     password: z.string().min(1).max(100).optional(),
-    email: z.string().email().optional(),
+    email: z.string().min(1).max(100).email().optional(),
   });
 }

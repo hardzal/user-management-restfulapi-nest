@@ -29,6 +29,7 @@ describe('UserController', () => {
   // REGISTER TEST
   describe('POST /api/users', () => {
     beforeEach(async () => {
+      await testService.deleteContact();
       await testService.deleteUser();
     });
 
@@ -87,7 +88,9 @@ describe('UserController', () => {
   // LOGIN TEST
   describe('POST /api/users/login', () => {
     beforeEach(async () => {
+      await testService.deleteContact();
       await testService.deleteUser();
+
       await testService.createUser();
     });
 
@@ -125,7 +128,9 @@ describe('UserController', () => {
   // GET USER TEST
   describe('GET /api/users/current', () => {
     beforeEach(async () => {
+      await testService.deleteContact();
       await testService.deleteUser();
+
       await testService.createUser();
     });
     it('should be rejected if token is invalid', async () => {
@@ -155,7 +160,9 @@ describe('UserController', () => {
   // UPDATE USER TEST
   describe('PATCH /api/users/current', () => {
     beforeEach(async () => {
+      await testService.deleteContact();
       await testService.deleteUser();
+
       await testService.createUser();
     });
 
@@ -221,7 +228,9 @@ describe('UserController', () => {
   // LOGOUT USER TEST
   describe('DELETE /api/users/current', () => {
     beforeEach(async () => {
+      await testService.deleteContact();
       await testService.deleteUser();
+
       await testService.createUser();
     });
 

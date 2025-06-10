@@ -6,6 +6,14 @@ import { User } from '@prisma/client';
 export class TestService {
   constructor(private prismaService: PrismaService) {}
 
+  async deleteContact() {
+    await this.prismaService.contact.deleteMany({
+      where: {
+        username: 'test_user',
+      },
+    });
+  }
+
   async deleteUser() {
     await this.prismaService.user.deleteMany({
       where: {
