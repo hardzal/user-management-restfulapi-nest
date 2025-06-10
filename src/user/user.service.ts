@@ -5,6 +5,7 @@ import { ValidationService } from '../common/validation.service';
 import {
   LoginUserRequest,
   RegisterUserRequest,
+  UpdateUserRequest,
   UserResponse,
 } from '../models/user.model';
 import { Logger } from 'winston';
@@ -103,6 +104,61 @@ export class UserService {
       email: user.email,
       token: user.token || '',
       created_at: user.created_at,
+    };
+  }
+
+  async update(user: User, request: UpdateUserRequest): Promise<UserResponse> {
+    this.logger.info(
+      `UserService.update(${JSON.stringify(user)}, ${JSON.stringify(request)})`,
+    );
+
+    const updateRequest: UpdateUserRequest = this.validationService.validate(
+      UserValidation.UPDATE,
+      request,
+    );
+
+    if (updateRequest.name) {
+      user.name = updateRequest.name;
+    }
+
+    if (updateRequest.password) {
+      user.password = await bcrypt.hash(updateRequest.password, 10);
+    }
+
+    if (updateRequest.email) {
+      user.email = updateRequest.email;
+    }
+
+    const result = await this.prismaService.user.update({
+      where: {
+        username: user.username,
+      },
+      data: user,
+    });
+
+    return {
+      name: result.name,
+      username: result.username,
+      email: result.email,
+      created_at: result.created_at,
+    };
+  }
+
+  async logout(user: User): Promise<UserResponse> {
+    const result = await this.prismaService.user.update({
+      where: {
+        username: user.username,
+      },
+      data: {
+        token: null,
+      },
+    });
+
+    return {
+      username: result.username,
+      name: result.name,
+      email: result.email,
+      created_at: result.created_at,
     };
   }
 }
