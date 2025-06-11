@@ -2,7 +2,9 @@
 
 ### Nestjs + postgreSQL with test
 
-- [ ] User API
+### CRUD + Auth + RBAC
+
+- [x] User API
 - [x] Auth API
 - [ ] Contact API
 - [ ] Address API

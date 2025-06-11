@@ -54,7 +54,7 @@ describe('UserController', () => {
         .post('/api/users')
         .send({
           username: 'test_user',
-          password: 'password_user',
+          password: 'test_user',
           name: 'test user',
           email: 'test_email@example.com',
         });
@@ -66,14 +66,14 @@ describe('UserController', () => {
       expect(response.body.data.name).toBe('test user');
     });
 
-    it('should be rejected if rejected if username already exists', async () => {
+    it('should be rejected if username already exists', async () => {
       await testService.createUser();
 
       const response = await request(app.getHttpServer())
         .post('/api/users')
         .send({
           username: 'test_user',
-          password: 'password_user',
+          password: 'test_user',
           name: 'test user',
           email: 'test_email@example.com',
         });

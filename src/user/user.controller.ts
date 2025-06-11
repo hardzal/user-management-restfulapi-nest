@@ -15,7 +15,7 @@ import {
   UpdateUserRequest,
   UserResponse,
 } from '../models/user.model';
-import { Auth } from '../common/auth.decoratoar';
+import { Auth } from '../common/auth.decorator';
 import { User } from '@prisma/client';
 
 @Controller('/api/users')
