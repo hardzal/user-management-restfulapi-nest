@@ -24,6 +24,9 @@ describe('UserController', () => {
 
     logger = app.get(WINSTON_MODULE_PROVIDER);
     testService = app.get(TestService);
+
+    await testService.deleteContact();
+    await testService.deleteUser();
   });
 
   // REGISTER TEST
