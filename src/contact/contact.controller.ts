@@ -3,17 +3,20 @@ import { ContactService } from './contact.service';
 import {
   ContactResponse,
   CreateContactRequest,
+  SearchContactRequest,
   UpdateContactRequest,
 } from '../../src/models/contact.model';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { WebResponse } from '../models/web.model';
 import { Auth } from '../../src/common/auth.decorator';
@@ -60,5 +63,38 @@ export class ContactController {
     return {
       data: result,
     };
+  }
+
+  @Delete('/:contactId')
+  @HttpCode(200)
+  async remove(
+    @Auth() user: User,
+    @Param('contactId', ParseIntPipe) contactId: number,
+  ): Promise<WebResponse<boolean>> {
+    await this.contactService.remove(user, contactId);
+    return {
+      data: true,
+    };
+  }
+
+  @Get()
+  @HttpCode(200)
+  async search(
+    @Auth() user: User,
+    @Query('name') name?: string,
+    @Query('email') email?: string,
+    @Query('phone') phone?: string,
+    @Query('page', new ParseIntPipe({ optional: true })) page?: number,
+    @Query('size', new ParseIntPipe({ optional: true })) size?: number,
+  ): Promise<WebResponse<ContactResponse[]>> {
+    const request: SearchContactRequest = {
+      name,
+      email,
+      phone,
+      page: page || 1,
+      size: size || 1,
+    };
+
+    return this.contactService.search(user, request);
   }
 }
