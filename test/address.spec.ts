@@ -26,7 +26,7 @@ describe('AddressController', () => {
     testService = app.get(TestService);
   });
 
-  // CONTACT CREATE TEST
+  // ADDRESS CREATE TEST
   describe('POST /api/contacts/:contactId/addresses', () => {
     beforeEach(async () => {
       await testService.deleteAddress();
@@ -68,6 +68,70 @@ describe('AddressController', () => {
           country: 'country test',
           postal_code: '1234',
         });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.id).toBeDefined();
+      expect(response.body.data.street).toBe('New street test');
+      expect(response.body.data.city).toBe('city test');
+      expect(response.body.data.province).toBe('province test');
+      expect(response.body.data.country).toBe('country test');
+      expect(response.body.data.postal_code).toBe('1234');
+    });
+  });
+
+  // ADDRESS GET TEST
+  describe('GET /api/contacts/:contactId/addresses/:addressId', () => {
+    beforeEach(async () => {
+      await testService.deleteAddress();
+      await testService.deleteContact();
+      await testService.deleteUser();
+
+      await testService.createUser();
+      await testService.createContact();
+      await testService.createAddress();
+    });
+
+    it('should be rejected if contact is not found', async () => {
+      const contact = await testService.getContact();
+      const address = await testService.getAddress();
+
+      const response = await request(app.getHttpServer())
+        .get(
+          `/api/contacts/${Number(contact?.id) + 1}/addresses/${address?.id}`,
+        )
+        .set('Authorization', 'test');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be rejected if address is not found', async () => {
+      const contact = await testService.getContact();
+      const address = await testService.getAddress();
+
+      const response = await request(app.getHttpServer())
+        .get(
+          `/api/contacts/${Number(contact?.id)}/addresses/${Number(address?.id) + 1}`,
+        )
+        .set('Authorization', 'test');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be able get address', async () => {
+      const contact = await testService.getContact();
+      const address = await testService.getAddress();
+
+      const response = await request(app.getHttpServer())
+        .get(`/api/contacts/${contact?.id}/addresses/${address?.id}`)
+        .set('Authorization', 'test');
 
       logger.info(response.body);
 

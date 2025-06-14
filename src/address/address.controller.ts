@@ -1,15 +1,21 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Param,
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
-import { CreateAddressRequest } from '../models/address.model';
+import {
+  AddressResponse,
+  CreateAddressRequest,
+  GetAddressRequest,
+} from '../models/address.model';
 import { Auth } from '../common/auth.decorator';
 import { User } from '@prisma/client';
+import { WebResponse } from 'src/models/web.model';
 
 @Controller('/api/contacts/:contactId/addresses')
 export class AddressController {
@@ -25,6 +31,25 @@ export class AddressController {
     request.contact_id = contactId;
 
     const result = await this.addressService.create(user, request);
+
+    return {
+      data: result,
+    };
+  }
+
+  @Get('/:addressId')
+  @HttpCode(200)
+  async get(
+    @Auth() user: User,
+    @Param('contactId', ParseIntPipe) contactId: number,
+    @Param('addressId', ParseIntPipe) addressId: number,
+  ): Promise<WebResponse<AddressResponse>> {
+    const request: GetAddressRequest = {
+      address_id: addressId,
+      contact_id: contactId,
+    };
+
+    const result = await this.addressService.get(user, request);
 
     return {
       data: result,
