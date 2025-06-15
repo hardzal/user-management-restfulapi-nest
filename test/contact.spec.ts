@@ -25,6 +25,7 @@ describe('ContactController', () => {
     logger = app.get(WINSTON_MODULE_PROVIDER);
     testService = app.get(TestService);
 
+    await testService.deleteAddress();
     await testService.deleteContact();
     await testService.deleteUser();
   });
@@ -32,6 +33,8 @@ describe('ContactController', () => {
   // CONTACT CREATE TEST
   describe('POST /api/contacts', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
+
       await testService.deleteContact();
       await testService.deleteUser();
 
@@ -80,6 +83,8 @@ describe('ContactController', () => {
   // CONTACT GET TEST
   describe('GET /api/contacts/:contactId', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
+
       await testService.deleteContact();
       await testService.deleteUser();
 
@@ -121,6 +126,8 @@ describe('ContactController', () => {
   // CONTACT PUT TEST
   describe('PUT /api/contacts', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
+
       await testService.deleteContact();
       await testService.deleteUser();
 
@@ -191,6 +198,8 @@ describe('ContactController', () => {
   // CONTACT DELETE TEST
   describe('DELETE /api/contacts/:contactId', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
+
       await testService.deleteContact();
       await testService.deleteUser();
 

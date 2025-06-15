@@ -32,6 +32,7 @@ describe('UserController', () => {
   // REGISTER TEST
   describe('POST /api/users', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
       await testService.deleteContact();
       await testService.deleteUser();
     });
@@ -91,6 +92,8 @@ describe('UserController', () => {
   // LOGIN TEST
   describe('POST /api/users/login', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
+
       await testService.deleteContact();
       await testService.deleteUser();
 
@@ -131,6 +134,8 @@ describe('UserController', () => {
   // GET USER TEST
   describe('GET /api/users/current', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
+
       await testService.deleteContact();
       await testService.deleteUser();
 
@@ -163,6 +168,8 @@ describe('UserController', () => {
   // UPDATE USER TEST
   describe('PATCH /api/users/current', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
+
       await testService.deleteContact();
       await testService.deleteUser();
 
@@ -231,6 +238,8 @@ describe('UserController', () => {
   // LOGOUT USER TEST
   describe('DELETE /api/users/current', () => {
     beforeEach(async () => {
+      await testService.deleteAddress();
+
       await testService.deleteContact();
       await testService.deleteUser();
 

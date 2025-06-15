@@ -10,3 +10,13 @@
 - [ ] Address API
 - [ ] Role API
 - [ ] Permission API
+
+---
+
+#### TEST
+
+`npm run test`
+
+#### Manual test
+
+`npx jest --runInBand --testPathPattern=namefile`

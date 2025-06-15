@@ -6,12 +6,14 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import {
   AddressResponse,
   CreateAddressRequest,
   GetAddressRequest,
+  UpdateAddressRequest,
 } from '../models/address.model';
 import { Auth } from '../common/auth.decorator';
 import { User } from '@prisma/client';
@@ -50,6 +52,24 @@ export class AddressController {
     };
 
     const result = await this.addressService.get(user, request);
+
+    return {
+      data: result,
+    };
+  }
+
+  @Put('/:addressId')
+  @HttpCode(200)
+  async update(
+    @Auth() user: User,
+    @Param('contactId', ParseIntPipe) contactId: number,
+    @Param('addressId', ParseIntPipe) addressId: number,
+    @Body() request: UpdateAddressRequest,
+  ) {
+    request.contact_id = contactId;
+    request.id = addressId;
+
+    const result = await this.addressService.update(user, request);
 
     return {
       data: result,
