@@ -19,7 +19,7 @@ import {
 } from '../models/address.model';
 import { Auth } from '../common/auth.decorator';
 import { User } from '@prisma/client';
-import { WebResponse } from 'src/models/web.model';
+import { WebResponse } from '../models/web.model';
 
 @Controller('/api/contacts/:contactId/addresses')
 export class AddressController {

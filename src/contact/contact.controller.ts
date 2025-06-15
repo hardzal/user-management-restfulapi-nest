@@ -5,7 +5,7 @@ import {
   CreateContactRequest,
   SearchContactRequest,
   UpdateContactRequest,
-} from '../../src/models/contact.model';
+} from '../models/contact.model';
 import {
   Body,
   Controller,
@@ -19,7 +19,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { WebResponse } from '../models/web.model';
-import { Auth } from '../../src/common/auth.decorator';
+import { Auth } from '../common/auth.decorator';
 
 @Controller('/api/contacts')
 export class ContactController {

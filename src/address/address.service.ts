@@ -8,9 +8,9 @@ import {
   GetAddressRequest,
   RemoveAddressRequest,
   UpdateAddressRequest,
-} from '../../src/models/address.model';
+} from '../models/address.model';
 import { Logger } from 'winston';
-import { ContactService } from '../../src/contact/contact.service';
+import { ContactService } from '../contact/contact.service';
 import { AddressValidation } from './address.validation';
 import { Address, User } from '@prisma/client';
 
