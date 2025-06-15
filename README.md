@@ -6,8 +6,8 @@
 
 - [x] User API
 - [x] Auth API
-- [ ] Contact API
-- [ ] Address API
+- [x] Contact API
+- [x] Address API
 - [ ] Role API
 - [ ] Permission API
 

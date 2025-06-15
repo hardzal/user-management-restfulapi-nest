@@ -201,47 +201,156 @@ describe('AddressController', () => {
       expect(response.body.data.country).toBe('country test');
       expect(response.body.data.postal_code).toBe('1234');
     });
+
+    it('should be rejected if contact is not found', async () => {
+      const contact = await testService.getContact();
+      const address = await testService.getAddress();
+      const response = await request(app.getHttpServer())
+        .put(
+          `/api/contacts/${Number(contact?.id) + 1}/addresses/${address?.id}`,
+        )
+        .set('Authorization', 'test')
+        .send({
+          street: 'New street test',
+          city: 'city test',
+          province: 'province test',
+          country: 'country test',
+          postal_code: '1234',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be rejected if address is not found', async () => {
+      const contact = await testService.getContact();
+      const address = await testService.getAddress();
+      const response = await request(app.getHttpServer())
+        .put(
+          `/api/contacts/${Number(contact?.id)}/addresses/${Number(address?.id) + 1}`,
+        )
+        .set('Authorization', 'test')
+        .send({
+          street: 'New street test',
+          city: 'city test',
+          province: 'province test',
+          country: 'country test',
+          postal_code: '1234',
+        });
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body.errors).toBeDefined();
+    });
   });
 
-  it('should be rejected if contact is not found', async () => {
-    const contact = await testService.getContact();
-    const address = await testService.getAddress();
-    const response = await request(app.getHttpServer())
-      .put(`/api/contacts/${Number(contact?.id) + 1}/addresses/${address?.id}`)
-      .set('Authorization', 'test')
-      .send({
-        street: 'New street test',
-        city: 'city test',
-        province: 'province test',
-        country: 'country test',
-        postal_code: '1234',
-      });
+  // ADDRESS DELETE TEST
+  describe('DELETE /api/contacts/:contactId/addresses/:addressId', () => {
+    beforeEach(async () => {
+      await testService.deleteAddress();
+      await testService.deleteContact();
+      await testService.deleteUser();
 
-    logger.info(response.body);
+      await testService.createUser();
+      await testService.createContact();
+      await testService.createAddress();
+    });
 
-    expect(response.status).toBe(404);
-    expect(response.body.errors).toBeDefined();
+    it('should be rejected if contact is not found', async () => {
+      const contact = await testService.getContact();
+      const address = await testService.getAddress();
+
+      const response = await request(app.getHttpServer())
+        .delete(
+          `/api/contacts/${Number(contact?.id) + 1}/addresses/${address?.id}`,
+        )
+        .set('Authorization', 'test');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be rejected if address is not found', async () => {
+      const contact = await testService.getContact();
+      const address = await testService.getAddress();
+
+      const response = await request(app.getHttpServer())
+        .delete(
+          `/api/contacts/${Number(contact?.id)}/addresses/${Number(address?.id) + 1}`,
+        )
+        .set('Authorization', 'test');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be able DELETE address', async () => {
+      const contact = await testService.getContact();
+      const address = await testService.getAddress();
+
+      const response = await request(app.getHttpServer())
+        .delete(`/api/contacts/${contact?.id}/addresses/${address?.id}`)
+        .set('Authorization', 'test');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toBe(true);
+
+      const addressCheck = await testService.getAddress();
+      expect(addressCheck).toBeNull();
+    });
   });
 
-  it('should be rejected if address is not found', async () => {
-    const contact = await testService.getContact();
-    const address = await testService.getAddress();
-    const response = await request(app.getHttpServer())
-      .put(
-        `/api/contacts/${Number(contact?.id)}/addresses/${Number(address?.id) + 1}`,
-      )
-      .set('Authorization', 'test')
-      .send({
-        street: 'New street test',
-        city: 'city test',
-        province: 'province test',
-        country: 'country test',
-        postal_code: '1234',
-      });
+  // ADDRESS LIST TEST
+  describe('GET /api/contacts/:contactId/addresses', () => {
+    beforeEach(async () => {
+      await testService.deleteAddress();
+      await testService.deleteContact();
+      await testService.deleteUser();
 
-    logger.info(response.body);
+      await testService.createUser();
+      await testService.createContact();
+      await testService.createAddress();
+    });
 
-    expect(response.status).toBe(404);
-    expect(response.body.errors).toBeDefined();
+    it('should be rejected if contact is not found', async () => {
+      const contact = await testService.getContact();
+
+      const response = await request(app.getHttpServer())
+        .get(`/api/contacts/${Number(contact?.id) + 1}/addresses`)
+        .set('Authorization', 'test');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(404);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it('should be able get LIST address', async () => {
+      const contact = await testService.getContact();
+
+      const response = await request(app.getHttpServer())
+        .get(`/api/contacts/${contact?.id}/addresses`)
+        .set('Authorization', 'test');
+
+      logger.info(response.body);
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.length).toBe(1);
+      expect(response.body.data[0].id).toBeDefined();
+      expect(response.body.data[0].street).toBe('New street test');
+      expect(response.body.data[0].city).toBe('city test');
+      expect(response.body.data[0].province).toBe('province test');
+      expect(response.body.data[0].country).toBe('country test');
+      expect(response.body.data[0].postal_code).toBe('1234');
+    });
   });
 });

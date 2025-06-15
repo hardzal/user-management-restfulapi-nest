@@ -6,6 +6,7 @@ import {
   AddressResponse,
   CreateAddressRequest,
   GetAddressRequest,
+  RemoveAddressRequest,
   UpdateAddressRequest,
 } from '../../src/models/address.model';
 import { Logger } from 'winston';
@@ -103,9 +104,9 @@ export class AddressService {
     //   `AddressService.update(${JSON.stringify(checkAddress)}, ${JSON.stringify(updateRequest)})`,
     // );
 
-    if (!checkAddress) {
-      throw new HttpException('Error, Address not found', 404);
-    }
+    // if (!checkAddress) {
+    //   throw new HttpException('Error, Address not found', 404);
+    // }
 
     const address = await this.prismaService.address.update({
       where: {
@@ -116,6 +117,46 @@ export class AddressService {
     });
 
     return this.toAddressResponse(address);
+  }
+
+  async remove(
+    user: User,
+    request: RemoveAddressRequest,
+  ): Promise<AddressResponse> {
+    const removeRequest: RemoveAddressRequest = this.validationService.validate(
+      AddressValidation.REMOVE,
+      request,
+    );
+
+    await this.contactService.checkContactMustExists(
+      user.username,
+      removeRequest.contact_id,
+    );
+
+    await this.checkAddressMustExists(
+      removeRequest.contact_id,
+      removeRequest.address_id,
+    );
+
+    const address = await this.prismaService.address.delete({
+      where: {
+        id: removeRequest.address_id,
+        contact_id: removeRequest.contact_id,
+      },
+    });
+
+    return this.toAddressResponse(address);
+  }
+
+  async list(user: User, contactId: number): Promise<AddressResponse[]> {
+    await this.contactService.checkContactMustExists(user.username, contactId);
+    const addresses = await this.prismaService.address.findMany({
+      where: {
+        contact_id: contactId,
+      },
+    });
+
+    return addresses.map((address) => this.toAddressResponse(address));
   }
 
   toAddressResponse(address: Address | null): AddressResponse {
