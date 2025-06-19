@@ -2,7 +2,7 @@
 
 ### Nestjs + postgreSQL with test
 
-### CRUD + Auth + RBAC
+### CRUD + Auth + RBAC + Logging
 
 - [x] User API
 - [x] Auth API
@@ -10,6 +10,8 @@
 - [x] Address API
 - [ ] Role API
 - [ ] Permission API
+- [ ] Access Logs
+- [ ] Audit Logs
 
 ---
 

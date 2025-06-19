@@ -1,0 +1,59 @@
+RBAC + Audit Logs ERD (Text Representation)
+
+[User]
+- id (PK)
+- username
+- email
+- password
+- created_at
+- updated_at
+
+[Role]
+- id (PK)
+- name
+- description
+
+[Permission]
+- id (PK)
+- name
+- description
+
+[UserRole]
+- id (PK)
+- user_id (FK) -> User.id
+- role_id (FK) -> Role.id
+
+[RolePermission]
+- id (PK)
+- role_id (FK) -> Role.id
+- permission_id (FK) -> Permission.id
+
+[AuditLog]
+- id (PK)
+- user_id (FK) -> User.id (nullable if system action)
+- action (e.g., CREATE, UPDATE, DELETE)
+- resource_type (e.g., User, Role, Permission)
+- resource_id (UUID of affected resource)
+- old_value (JSON or TEXT)
+- new_value (JSON or TEXT)
+- ip_address
+- timestamp
+
+Optional:
+[AccessLog]
+- id (PK)
+- user_id (FK) -> User.id
+- action (e.g., LOGIN, LOGOUT, API_ACCESS)
+- endpoint
+- ip_address
+- timestamp
+
+# Relationship Summary:
+- One User can have many Roles (via UserRole)
+- One Role can have many Permissions (via RolePermission)
+- AuditLog relates to the User who performed the action (nullable for system actions)
+- AccessLog relates to the User performing the access
+
+# Notes:
+- You can expand AuditLog to cover more detailed resource types if needed.
+- You may separate Permission granularity based on your project needs.

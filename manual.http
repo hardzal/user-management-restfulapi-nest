@@ -37,7 +37,7 @@ Content-Type: application/json
 Authorization: f5fc1bb9-a979-4f95-9173-8d42d0ac8d52
 
 {
-  "password" : "password_rahasia"
+  "password" : "password_rahasia "
 }
 
 ### Create contact

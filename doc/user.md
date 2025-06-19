@@ -185,3 +185,15 @@ Response body (failed) :
   "errors": "user not found"
 }
 ```
+
+## Role Assigment to User
+
+Endpoint: POST /users/:id/assign-role
+
+## GET User Roles
+
+Endpoint: GET /api/users/:id/roles
+
+## Remove User Role
+
+Endpoint: DELETE /api/users/:id/remove-role/:id

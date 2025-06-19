@@ -97,6 +97,10 @@ Response body :
 
 Endpoint : DELETE /api/contacts/:contactId/addressess/:addressId
 
+Headers:
+
+- Authorization: token
+
 Response body :
 
 ```json
@@ -107,11 +111,11 @@ Response body :
 
 ## List Address
 
+Endpoint : POST /api/contacts/:contactId/addressess
+
 Headers:
 
 - Authorization: token
-
-Endpoint : POST /api/contacts/:contactId/addressess
 
 Response body :
 
